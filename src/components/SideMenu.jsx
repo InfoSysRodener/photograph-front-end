@@ -7,7 +7,7 @@ import {
   BsArrowRight,
 } from 'react-icons/bs';
 
-const SideMenu = ({ status, isOpen, onClick }) => {
+const SideMenu = ({ status = 'live', isOpen, onClick }) => {
   return (
     <>
       <div
