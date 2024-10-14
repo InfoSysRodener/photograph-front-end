@@ -7,6 +7,8 @@ const Layout = () => {
   const [openModal, setOpenModal] = useState(false);
   const { pathname } = useLocation();
 
+  const isOnHome = pathname === '/';
+
   const handleOpenModal = () => {
     setOpenModal(!openModal);
   };
@@ -22,7 +24,7 @@ const Layout = () => {
         <Outlet />
       </div>
 
-      <SideMenu isOpen={openModal} onClick={handleOpenModal} />
+      {!isOnHome && <SideMenu isOpen={openModal} onClick={handleOpenModal} />}
     </>
   );
 };
