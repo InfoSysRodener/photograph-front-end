@@ -9,7 +9,8 @@ const Invite = () => {
   //get album with remote
   const album_id = localStorage.getItem('album_id');
 
-  const domain = 'photograph-app.test';
+  // const domain = 'photograph-app.test';
+  const domain = '54.254.11.45';
 
   const url = `http://${domain}/api/album/${album_id}`;
 

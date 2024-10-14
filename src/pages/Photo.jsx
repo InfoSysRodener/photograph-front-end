@@ -9,7 +9,8 @@ const fetcher = (...args) =>
 const Photo = () => {
   const { photo_id } = useParams();
 
-  const domain = 'photograph-app.test';
+  // const domain = 'photograph-app.test';
+  const domain = '54.254.11.45';
 
   const url = `http://${domain}/api/capture/${photo_id}`;
 

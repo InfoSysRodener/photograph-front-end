@@ -7,7 +7,8 @@ async function getRequest(url) {
 }
 
 function Home() {
-  const domain = 'photograph-app.test';
+  // const domain = 'photograph-app.test';
+  const domain = '54.254.11.45';
   const url = `http://${domain}/api/generateQRCodeUrl`;
 
   const { data, trigger, isMutating } = useSWRMutation(url, getRequest);

@@ -13,7 +13,7 @@ const getKey = (pageIndex, previousPageData, albumId) => {
 
   if (previousPageData && !previousPageData.length) return null; // reached the end
 
-  return `http://photograph-app.test/api/capture?page=${pageIndex}&album_id=${albumId}`; // SWR key
+  return `http://54.254.11.45/api/capture?page=${pageIndex}&album_id=${albumId}`; // SWR key
 };
 
 function Album() {
