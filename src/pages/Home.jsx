@@ -1,49 +1,51 @@
-import useSWR from 'swr';
-import ImageCard from '../components/ImageCard';
-import { useParams } from 'react-router-dom';
+import useSWRMutation from 'swr/mutation';
 
-const fetcher = (...args) =>
-  fetch(...args)
-    .then((res) => res.json())
-    .then((json) => json.data.data);
+async function getRequest(url) {
+  return fetch(url, {
+    method: 'POST',
+  }).then((res) => res.json());
+}
 
 function Home() {
-  const { albumId } = useParams();
-
   const domain = 'photograph-app.test';
+  const url = `http://${domain}/api/generateQRCodeUrl`;
 
-  const url = `http://${domain}/api/capture?album_id=${albumId}`;
-
-  const { data, error, isLoading } = useSWR(url, fetcher, {
-    refreshInterval: 20000,
-  });
-
-  if (error) return <div>failed to load</div>;
-  if (isLoading)
-    return (
-      <div className="font-work-sans text-3xl inset-0 flex justify-center items-center h-screen">
-        loading...
-      </div>
-    );
+  const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
   return (
     <>
-      {data.length == 0 && (
-        <div className="font-work-sans text-3xl inset-0 flex justify-center items-center h-screen bounce">
-          No Image...
-        </div>
-      )}
-      <div className="columns-1 sm:columns-2 md:columns-2 lg:columns-3 gap-5 px-[15px] sm:py-5">
-        {data.map((user, index) => (
-          <div
-            key={user.id}
-            className="fadeInCustom transition-transform"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <ImageCard src={user.image_path} />
-            <p>{user.id}</p>
-          </div>
-        ))}
+      <div className="flex flex-col  justify-center items-center h-screen w-full relative font-work-sans">
+        <img src={data?.data.remote.qrcode_image} />
+        <button
+          onClick={async () => {
+            try {
+              const result = await trigger();
+              console.log(result);
+              // eslint-disable-next-line no-unused-vars
+            } catch (e) {
+              // error handling
+            }
+          }}
+          disabled={isMutating}
+          //   className="bg-primary text-white px-2 py-3 rounded-md mb-5"
+          className="cursor-pointer font-work-sans text-xl inline-block rounded bg-primary px-6 pb-2 pt-2.5 font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 disabled:opacity-70 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
+        >
+          {isMutating ? (
+            <>
+              <div className="inline-block h-4 w-4 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]"></div>
+              <span>Loading...</span>
+            </>
+          ) : (
+            <>Generate QR Code</>
+          )}
+        </button>
+        {/* <p className="w-1/2 relative inline-flex">{data?.data.url}</p> */}
+
+        {data != undefined && (
+          <a className="text-blue-500 underline" href={data?.data.url}>
+            {data?.data.url}
+          </a>
+        )}
       </div>
     </>
   );

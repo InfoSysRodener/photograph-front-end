@@ -1,13 +1,37 @@
 /* eslint-disable react/prop-types */
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   BsTwitter,
   BsInstagram,
   BsDribbble,
   BsArrowRight,
+  BsEnvelope,
+  BsPhone,
 } from 'react-icons/bs';
 
 const SideMenu = ({ status = 'live', isOpen, onClick }) => {
+  const location = useLocation();
+
+  const album_id = localStorage.getItem('album_id');
+  const user_id = localStorage.getItem('user_id');
+  const token = localStorage.getItem('token');
+  localStorage.setItem('album_status', 'live');
+  const album_status = localStorage.getItem('album_status');
+
+  const [active, setActive] = useState();
+
+  useEffect(() => {
+    if (location.pathname.includes('/photographer')) {
+      setActive('home');
+    } else if (location.pathname.includes('/profile')) {
+      setActive('profile');
+    } else if (location.pathname.includes('/invite')) {
+      setActive('invite');
+    }
+  }, [location]);
+
   return (
     <>
       <div
@@ -41,19 +65,35 @@ const SideMenu = ({ status = 'live', isOpen, onClick }) => {
         </div>
         <div className="h-96 text-base text-black font-work-sans">
           <nav className="pl-[30px]">
-            {status === 'live' ? (
+            {status === album_status ? (
               <ul>
-                <li className="py-1 mb-[10px] cursor-pointer border-b-2 border-b-primary inline-block">
+                <Link
+                  to={`/photographer/album/${album_id}/user/${user_id}/${token}`}
+                  className={`py-1 mb-[10px] cursor-pointer group relative  inline-flex ${active === 'home' ? 'border-b-2 border-b-primary' : ''}`}
+                >
                   Home
-                </li>
-                <li className="py-1 mb-[10px] cursor-pointer group relative inline-block">
-                  Receive all my pictures
-                  <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
-                </li>
-                <li className="py-1 mb-[10px] cursor-pointer  group relative inline-block">
-                  Invite Friends to album
-                  <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
-                </li>
+                  {active !== 'home' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
+                <Link
+                  to={'/profile'}
+                  className={`py-1 mb-[10px] cursor-pointer group relative inline-flex items-center gap-2  ${active === 'profile' ? 'border-b-2 border-b-primary' : ''}`}
+                >
+                  Receive all my pictures <BsEnvelope />
+                  {active !== 'profile' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
+                <Link
+                  to={'/invite'}
+                  className={`py-1 mb-[10px] cursor-pointer  group relative inline-flex items-center gap-2 ${active === 'invite' ? 'border-b-2 border-b-primary' : ''}`}
+                >
+                  Invite Friends to album <BsPhone />
+                  {active !== 'invite' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
               </ul>
             ) : (
               <ul>
