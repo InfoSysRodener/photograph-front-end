@@ -9,7 +9,7 @@ import './App.css';
 import Home from './pages/Home';
 import Photo from './pages/Photo';
 
-import SideMenu from './components/sideMenu';
+import SideMenu from './components/SideMenu';
 import Header from './components/Header';
 import { useState } from 'react';
 
