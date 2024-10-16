@@ -1,4 +1,6 @@
 import useSWRMutation from 'swr/mutation';
+import domainUrl from '../util/domainUrl';
+import Cookies from 'js-cookie';
 
 async function getRequest(url) {
   return fetch(url, {
@@ -7,9 +9,9 @@ async function getRequest(url) {
 }
 
 function Home() {
-  // const domain = 'photograph-app.test';
-  const domain = '54.254.11.45';
-  const url = `http://${domain}/api/generateQRCodeUrl`;
+  const value = Cookies.get('user_token');
+  console.log(value);
+  const url = `${domainUrl}/api/generateQRCodeUrl`;
 
   const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
@@ -42,9 +44,14 @@ function Home() {
             )}
           </button>
           {data != undefined && (
-            <a className="text-blue-500 underline" href={data?.data.url}>
-              {data?.data.url}
-            </a>
+            <div>
+              <a
+                className="text-blue-500 underline mt-10"
+                href={data?.data.url}
+              >
+                {data?.data.url}
+              </a>
+            </div>
           )}
         </div>
         {/* <p className="w-1/2 relative inline-flex">{data?.data.url}</p> */}

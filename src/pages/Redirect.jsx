@@ -1,10 +1,12 @@
 import useSWRMutation from 'swr/mutation';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import domainUrl from '../util/domainUrl';
 
 async function getRequest(url) {
   return fetch(url, {
     method: 'POST',
+    credentials: 'include',
   }).then((res) => res.json());
 }
 
@@ -12,10 +14,7 @@ function Redirect() {
   const { remote_id } = useParams();
   const navigate = useNavigate();
 
-  // const domain = 'photograph-app.test';
-  const domain = '54.254.11.45';
-
-  const url = `http://${domain}/api/scan?remote_id=${remote_id}`;
+  const url = `${domainUrl}/api/scan?remote_id=${remote_id}`;
 
   const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
@@ -23,7 +22,6 @@ function Redirect() {
     const fetchData = async () => {
       try {
         const result = await trigger();
-        // console.log(result);
 
         localStorage.setItem('album_id', result.data.url.album_id);
         localStorage.setItem('user_id', result.data.url.user_id);

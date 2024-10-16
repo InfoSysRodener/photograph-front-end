@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
+import domainUrl from '../util/domainUrl';
 
 const fetcher = (...args) =>
   fetch(...args)
@@ -9,10 +10,7 @@ const fetcher = (...args) =>
 const Photo = () => {
   const { photo_id } = useParams();
 
-  // const domain = 'photograph-app.test';
-  const domain = '54.254.11.45';
-
-  const url = `http://${domain}/api/capture/${photo_id}`;
+  const url = `${domainUrl}/api/capture/${photo_id}`;
 
   const { data, error, isLoading } = useSWR(url, fetcher, {
     refreshInterval: 20000,
