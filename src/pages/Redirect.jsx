@@ -27,9 +27,12 @@ function Redirect() {
         localStorage.setItem('user_id', result.data.url.user_id);
         localStorage.setItem('token', result.data.url.token);
 
-        navigate(
-          `/photographer/album/${result.data?.url.album_id}/user/${result.data?.url.user_id}/${result.data?.url.token}`
-        );
+        //open modal
+        navigate('/profile');
+
+        // navigate(
+        //   `/photographer/album/${result.data?.url.album_id}/user/${result.data?.url.user_id}/${result.data?.url.token}`
+        // );
         // eslint-disable-next-line no-unused-vars
       } catch (e) {
         // error handling

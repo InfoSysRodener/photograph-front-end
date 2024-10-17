@@ -51,8 +51,6 @@ const Invite = () => {
     fetchData();
   }, [trigger]);
 
-  localStorage.setItem('album_status', data?.status);
-
   return (
     <div className="relative w-full h-full">
       <div className="flex justify-center items-center flex-col mt-10 px-5">

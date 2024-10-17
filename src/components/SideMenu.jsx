@@ -1,6 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import useSWRMutation from 'swr/mutation';
+import domainUrl from '../util/domainUrl';
+import useSWR from 'swr';
 
 import {
   BsTwitter,
@@ -9,15 +12,33 @@ import {
   BsArrowRight,
   BsEnvelope,
   BsPhone,
+  BsDownload,
 } from 'react-icons/bs';
 
-const SideMenu = ({ status = 'live', isOpen, onClick }) => {
+async function getRequest(url, { arg }) {
+  return fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      album_status: arg,
+    }),
+  }).then((res) => res.json());
+}
+
+const fetcher = (url) =>
+  fetch(url)
+    .then((r) => r.json())
+    .then((data) => data);
+
+const SideMenu = ({ isOpen, onClick }) => {
   const location = useLocation();
 
   const album_id = localStorage.getItem('album_id');
   const user_id = localStorage.getItem('user_id');
   const token = localStorage.getItem('token');
-  localStorage.setItem('album_status', 'live');
+
   const album_status = localStorage.getItem('album_status');
 
   const [active, setActive] = useState();
@@ -29,8 +50,23 @@ const SideMenu = ({ status = 'live', isOpen, onClick }) => {
       setActive('profile');
     } else if (location.pathname.includes('/invite')) {
       setActive('invite');
+    } else if (location.pathname.includes('/invite-friend-email')) {
+      setActive('invite');
+    } else if (location.pathname.includes('/download')) {
+      setActive('invite');
     }
   }, [location]);
+
+  const url = `${domainUrl}/api/album/${album_id}`;
+
+  const { trigger } = useSWRMutation(url, getRequest);
+  const { data } = useSWR(`${domainUrl}/api/album/${album_id}`, fetcher);
+
+  localStorage.setItem('album_status', data?.data.status);
+
+  const handleCheckboxChange = (e) => {
+    trigger(e.target.checked ? 'longterm' : 'live');
+  };
 
   return (
     <>
@@ -65,7 +101,7 @@ const SideMenu = ({ status = 'live', isOpen, onClick }) => {
         </div>
         <div className="h-96 text-base text-black font-work-sans">
           <nav className="pl-[30px]">
-            {status === album_status ? (
+            {data?.data.status === 'live' ? (
               <ul>
                 <Link
                   to={`/photographer/album/${album_id}/user/${user_id}/${token}`}
@@ -97,21 +133,52 @@ const SideMenu = ({ status = 'live', isOpen, onClick }) => {
               </ul>
             ) : (
               <ul>
-                <li className="py-1 mb-[10px] cursor-pointer border-b-2 border-b-primary inline-block">
+                <Link
+                  to={`/photographer/album/${album_id}/user/${user_id}/${token}`}
+                  className={`py-1 mb-[10px] cursor-pointer group relative  inline-flex ${active === 'home' ? 'border-b-2 border-b-primary' : ''}`}
+                >
                   Home
-                </li>
-                <li className="py-1 mb-[10px] cursor-pointer  group relative inline-block">
-                  Invite Friends to album
-                  <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
-                </li>
-                <li className="py-1 mb-[10px] cursor-pointer  group relative inline-block">
-                  Download all my picture
-                  <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
-                </li>
+                  {active !== 'home' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
+                <Link
+                  to={'/invite-friend-email'}
+                  className={`py-1 mb-[10px] cursor-pointer group relative inline-flex items-center gap-2  ${active === 'invite-friend-email' ? 'border-b-2 border-b-primary' : ''}`}
+                >
+                  Invite Friends to album <BsPhone />
+                  {active !== 'invite-friend-email' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
+                <Link
+                  to={'/download'}
+                  className={`py-1 mb-[10px] cursor-pointer  group relative inline-flex items-center gap-2 ${active === 'download' ? 'border-b-2 border-b-primary' : ''}`}
+                >
+                  Download all my picture <BsDownload />
+                  {active !== 'download' && (
+                    <span className="absolute left-0 bottom-0 w-full h-[2px] bg-primary scale-x-0 group-hover:scale-x-50 transition-transform duration-500 origin-left"></span>
+                  )}
+                </Link>
               </ul>
             )}
           </nav>
+
           <footer className="absolute bottom-10 font-work-sans pl-[30px]">
+            <div className="relative mb-10 flex flex-col justify-center gap-5">
+              <p>{data?.data.status}</p>
+              <label className="relative inline-flex cursor-pointer items-center">
+                <input
+                  id="switch"
+                  type="checkbox"
+                  className="peer sr-only"
+                  checked={data?.data.status === 'longterm'}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="switch" className="hidden"></label>
+                <div className="peer h-6 w-11 rounded-full border bg-slate-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-slate-800 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-green-300"></div>
+              </label>
+            </div>
             <ul className="flex gap-10 mb-5 text-[#666666]">
               <li>
                 <BsTwitter

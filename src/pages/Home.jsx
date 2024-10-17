@@ -1,6 +1,5 @@
 import useSWRMutation from 'swr/mutation';
 import domainUrl from '../util/domainUrl';
-import Cookies from 'js-cookie';
 
 async function getRequest(url) {
   return fetch(url, {
@@ -9,8 +8,6 @@ async function getRequest(url) {
 }
 
 function Home() {
-  const value = Cookies.get('user_token');
-  console.log(value);
   const url = `${domainUrl}/api/generateQRCodeUrl`;
 
   const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
@@ -18,7 +15,7 @@ function Home() {
   return (
     <>
       <div className=" w-full relative font-work-sans">
-        <div className="flex flex-col  justify-center items-center h-screen sm:ml-[250px] ">
+        <div className="flex flex-col  justify-center items-center h-screen sm:ml-[250px] relative ">
           <img className="mb-10" src={data?.data.remote.qrcode_image} />
           <button
             onClick={async () => {
@@ -44,14 +41,12 @@ function Home() {
             )}
           </button>
           {data != undefined && (
-            <div>
-              <a
-                className="text-blue-500 underline mt-10"
-                href={data?.data.url}
-              >
-                {data?.data.url}
-              </a>
-            </div>
+            <a
+              className="text-blue-500 underline mt-10 inline break-words w-72"
+              href={data?.data.url}
+            >
+              {data?.data.url}
+            </a>
           )}
         </div>
         {/* <p className="w-1/2 relative inline-flex">{data?.data.url}</p> */}

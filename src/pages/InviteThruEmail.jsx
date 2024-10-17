@@ -1,7 +1,6 @@
 import domainUrl from '../util/domainUrl';
 import useSWRMutation from 'swr/mutation';
-import useSWR from 'swr';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 async function getRequest(url, { arg }) {
   return fetch(url, {
@@ -15,49 +14,23 @@ async function getRequest(url, { arg }) {
   }).then((res) => res.json());
 }
 
-const fetcher = (url) =>
-  fetch(url)
-    .then((r) => r.json())
-    .then((data) => data);
-
-const Profile = () => {
+const InviteThruEmail = () => {
   const [email, setEmail] = useState('');
 
   const user_id = localStorage.getItem('user_id');
 
   const url = `${domainUrl}/api/user/${user_id}`;
 
-  const {
-    data: updatedData,
-    trigger,
-    isMutating,
-  } = useSWRMutation(url, getRequest);
+  const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
-  const { data } = useSWR(`${domainUrl}/api/user/${user_id}`, fetcher);
-
-  const handleUpdate = () => {
+  const handleSubmit = () => {
     trigger(email);
   };
 
-  useEffect(() => {
-    if (data?.data.email) {
-      setEmail(data?.data?.email);
-    }
-  }, [data]);
-
   return (
     <div className="flex flex-col justify-center items-center h-96 mt-40">
-      {data?.data.email_verified_at === null ? (
-        <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
-          Provide your email to ensure future access to this album
-        </p>
-      ) : (
-        <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
-          PROFILE
-        </p>
-      )}
-      <p className="text-lg font-work-sans font-semibold text-red-400">
-        {updatedData && updatedData?.message}
+      <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
+        Invite a Friend Thru Email
       </p>
 
       <div className="max-w-2xl mx-auto ">
@@ -85,14 +58,14 @@ const Profile = () => {
         </div>
       ) : (
         <button
-          onClick={handleUpdate}
+          onClick={handleSubmit}
           className="bg-primary mt-10 text-white font-bold py-2 px-4 rounded w-80"
         >
-          Update
+          Send
         </button>
       )}
     </div>
   );
 };
 
-export default Profile;
+export default InviteThruEmail;

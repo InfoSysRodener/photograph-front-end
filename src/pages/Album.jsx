@@ -3,6 +3,7 @@ import ImageCard from '../components/ImageCard';
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import domainUrl from '../util/domainUrl';
+
 const fetcher = (...args) =>
   fetch(...args, { credentials: 'include' })
     .then((res) => res.json())
@@ -18,7 +19,7 @@ const getKey = (pageIndex, previousPageData, albumId) => {
 
 function Album() {
   const [loading, setLoading] = useState(false);
-  const { albumId, userId, token } = useParams();
+  const { albumId, userId, hash } = useParams();
 
   const handleScroll = () => {
     if (
@@ -54,7 +55,7 @@ function Album() {
 
   localStorage.setItem('album_id', albumId);
   localStorage.setItem('user_id', userId);
-  localStorage.setItem('token', token);
+  localStorage.setItem('token', hash);
 
   useEffect(() => {
     if (loading == true) {
@@ -88,11 +89,11 @@ function Album() {
         ))}
       </div>
 
-      <div
+      {/* <div
         className={`${loading ? 'hidden' : 'block'} flex justify-center items-center`}
       >
         <span className="text-xl text-primary font-bold p-10">Loading...</span>
-      </div>
+      </div> */}
     </>
   );
 }

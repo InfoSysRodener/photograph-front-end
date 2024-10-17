@@ -13,6 +13,8 @@ import Photo from './pages/Photo';
 import Layout from './pages/Layout';
 import Redirect from './pages/Redirect';
 import Invite from './pages/Invite';
+import InviteThruEmail from './pages/InviteThruEmail';
+import Download from './pages/Download';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +31,8 @@ const router = createBrowserRouter(
       />
       <Route path="/profile" element={<Profile />} />
       <Route path="/invite" element={<Invite />} />
+      <Route path="/invite-friend-email" element={<InviteThruEmail />} />
+      <Route path="/download" element={<Download />} />
     </Route>
   )
 );
