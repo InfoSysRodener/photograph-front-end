@@ -27,6 +27,7 @@ const Photo = () => {
   return (
     <div className="relative w-full">
       <div className="flex flex-col justify-center items-center h-screen px-5 ">
+        
         <img src={data.image_path} alt="Photo" />
         <h2 className="text-base mt-10 font-work-sans">
           long click on the image and click save to camera roll

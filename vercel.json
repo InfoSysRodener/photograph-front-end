@@ -1,8 +1,9 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "http://54.254.11.45/api/"
+      "source": "/(.*)",
+      "destination": "http://photograph-front-end.vercel.app/$1",
+      "permanent": true
     }
   ]
 }

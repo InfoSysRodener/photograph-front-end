@@ -56,7 +56,7 @@ const Invite = () => {
       <div className="flex justify-center items-center flex-col mt-10 px-5">
         {isMutating && (
           <div className="flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-2"></div>
             <p className="text-gray-500">Loading...</p>
           </div>
         )}

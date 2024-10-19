@@ -38,8 +38,7 @@ const SideMenu = ({ isOpen, onClick }) => {
   const album_id = localStorage.getItem('album_id');
   const user_id = localStorage.getItem('user_id');
   const token = localStorage.getItem('token');
-
-  const album_status = localStorage.getItem('album_status');
+  localStorage.getItem('album_status');
 
   const [active, setActive] = useState();
 

@@ -21,7 +21,7 @@ const InviteThruEmail = () => {
 
   const url = `${domainUrl}/api/user/${user_id}`;
 
-  const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
+  const { trigger, isMutating } = useSWRMutation(url, getRequest);
 
   const handleSubmit = () => {
     trigger(email);
@@ -30,7 +30,7 @@ const InviteThruEmail = () => {
   return (
     <div className="flex flex-col justify-center items-center h-96 mt-40">
       <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
-        Invite a Friend Thru Email
+        Share with a Friend
       </p>
 
       <div className="max-w-2xl mx-auto ">
@@ -38,7 +38,7 @@ const InviteThruEmail = () => {
           htmlFor="email"
           className="block text-sm font-medium text-gray-700 dark:text-gray-100"
         >
-          Email
+          Input your friend email
         </label>
         <div className="flex items-center mt-1 w-80">
           <input
