@@ -2,8 +2,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "http://photograph-front-end.vercel.app/$1",
-      "permanent": true
+      "destination": "http://photograph-front-end.vercel.app/$1"
     }
   ]
 }
