@@ -9,6 +9,9 @@ const Layout = () => {
 
   const isOnHome = pathname === '/';
   const isOnRedirect = pathname.startsWith('/photographer/remote/');
+  const isOnFriendSharedAlbumRedirect = pathname.startsWith(
+    '/photographer/friend/album'
+  );
 
   const handleOpenModal = () => {
     setOpenModal(!openModal);
@@ -25,7 +28,7 @@ const Layout = () => {
         <Outlet />
       </div>
 
-      {!(isOnHome || isOnRedirect) && (
+      {!(isOnHome || isOnRedirect || isOnFriendSharedAlbumRedirect) && (
         <SideMenu isOpen={openModal} onClick={handleOpenModal} />
       )}
     </>

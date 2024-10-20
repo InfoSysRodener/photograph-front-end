@@ -16,6 +16,7 @@ import Redirect from './pages/Redirect';
 import Invite from './pages/Invite';
 import InviteThruEmail from './pages/InviteThruEmail';
 import Download from './pages/Download';
+import SharedAlbumRedirect from './pages/SharedAlbumRedirect';
 
 const HashRedirect = () => {
   // Check if the URL hash contains a path
@@ -34,6 +35,14 @@ const router = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="/photo/:photo_id" element={<Photo />} />
+      <Route
+        path="/photographer/friend/album/:albumId"
+        element={<SharedAlbumRedirect />}
+      />
+      {/* <Route
+        path="/photographer/friend/album/:albumId/user/:userEmail"
+        element={<SharedAlbumRedirect />}
+      /> */}
       <Route
         path="/photographer/album/:albumId/user/:userId/:hash"
         element={<Album />}

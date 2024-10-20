@@ -12,6 +12,7 @@ async function getRequest(url, { arg }) {
     body: JSON.stringify({
       email: arg.email,
       album_id: arg.albumId,
+      type: 'email',
     }),
   }).then((res) => res.json());
 }
@@ -30,7 +31,7 @@ const InviteThruEmail = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-96 mt-40">
+    <form className="flex flex-col justify-center items-center h-96 mt-40">
       <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
         Share Album with a Friend
       </p>
@@ -56,6 +57,7 @@ const InviteThruEmail = () => {
             placeholder="user@mail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
       </div>
@@ -69,7 +71,7 @@ const InviteThruEmail = () => {
           Send
         </button>
       )}
-    </div>
+    </form>
   );
 };
 

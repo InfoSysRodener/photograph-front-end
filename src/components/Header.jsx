@@ -7,11 +7,15 @@ const Header = ({ onClick }) => {
   const isOnPhotoDetails = location.pathname.startsWith('/photo/');
   const isOnHome = location.pathname === '/';
 
+  const album_id = localStorage.getItem('album_id');
+  const user_id = localStorage.getItem('user_id');
+  const token = localStorage.getItem('token');
+
   return (
     <nav className="flex justify-center items-center p-5 relative sm:hidden ">
       {isOnPhotoDetails && (
         <Link
-          to={'/photographer/album/2/user/123/123213'}
+          to={`/photographer/album/${album_id}/user/${user_id}/${token}`}
           className="absolute left-5"
         >
           <BsArrowLeft size={30} color="black" height={50} />
