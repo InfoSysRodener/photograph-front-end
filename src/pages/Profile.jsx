@@ -2,6 +2,7 @@ import domainUrl from '../util/domainUrl';
 import useSWRMutation from 'swr/mutation';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
+import Loading from '../components/Loading';
 
 async function getRequest(url, { arg }) {
   return fetch(url, {
@@ -57,6 +58,7 @@ const Profile = () => {
         </p>
       )}
       <p className="text-lg font-work-sans font-semibold text-red-400">
+        {/* {console.log(updatedData)} */}
         {updatedData && updatedData?.message}
       </p>
 
@@ -79,10 +81,7 @@ const Profile = () => {
         </div>
       </div>
       {isMutating ? (
-        <div className="flex flex-col items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-2"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
+        <Loading />
       ) : (
         <button
           onClick={handleUpdate}

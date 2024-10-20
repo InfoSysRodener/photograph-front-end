@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Navigate,
 } from 'react-router-dom';
 import './App.css';
 
@@ -16,6 +17,18 @@ import Invite from './pages/Invite';
 import InviteThruEmail from './pages/InviteThruEmail';
 import Download from './pages/Download';
 
+const HashRedirect = () => {
+  // Check if the URL hash contains a path
+  const path = (/#!(\/.*)$/.exec(location.hash) || [])[1];
+
+  // If a path is found, redirect to that path
+  if (path) {
+    return <Navigate to={path} replace />;
+  }
+
+  return null;
+};
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -25,6 +38,7 @@ const router = createBrowserRouter(
         path="/photographer/album/:albumId/user/:userId/:hash"
         element={<Album />}
       />
+      <Route path="/photographer/friend/album/:albumId" element={<Album />} />
       <Route
         path="/photographer/remote/:remote_id/:token"
         element={<Redirect />}
@@ -33,6 +47,9 @@ const router = createBrowserRouter(
       <Route path="/invite" element={<Invite />} />
       <Route path="/invite-friend-email" element={<InviteThruEmail />} />
       <Route path="/download" element={<Download />} />
+
+      {/* Handle hash redirects */}
+      <Route path="*" element={<HashRedirect />} />
     </Route>
   )
 );

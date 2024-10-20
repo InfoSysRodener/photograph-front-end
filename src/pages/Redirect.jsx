@@ -19,28 +19,35 @@ function Redirect() {
   const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await trigger();
+    const timeout = setTimeout(() => {
+      const fetchData = async () => {
+        try {
+          const result = await trigger();
 
-        localStorage.setItem('album_id', result.data.url.album_id);
-        localStorage.setItem('user_id', result.data.url.user_id);
-        localStorage.setItem('token', result.data.url.token);
+          if (result?.data?.url) {
+            const { album_id, user_id, token } = result.data.url;
 
-        //open modal
-        navigate('/profile');
+            localStorage.setItem('album_id', album_id);
+            localStorage.setItem('user_id', user_id);
+            localStorage.setItem('token', token);
 
-        // navigate(
-        //   `/photographer/album/${result.data?.url.album_id}/user/${result.data?.url.user_id}/${result.data?.url.token}`
-        // );
-        // eslint-disable-next-line no-unused-vars
-      } catch (e) {
-        // error handling
-      }
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger]);
+            navigate('/profile');
+          }
+
+          // navigate(
+          //   `/photographer/album/${result.data?.url.album_id}/user/${result.data?.url.user_id}/${result.data?.url.token}`
+          // );
+
+          // eslint-disable-next-line no-unused-vars
+        } catch (e) {
+          // error handling
+        }
+      };
+      fetchData();
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [navigate, trigger]);
 
   return (
     <>
@@ -51,6 +58,10 @@ function Redirect() {
             <span className="text-2xl text-primary">Redirect...</span>
           </>
         )}
+        {/* <>
+          <div className="inline-block h-4 w-4 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]"></div>
+          <span className="text-2xl text-primary">Redirect...</span>
+        </> */}
         <span className="text-2xl text-primary"> {data && data.message}</span>
       </div>
     </>

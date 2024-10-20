@@ -1,15 +1,17 @@
 import domainUrl from '../util/domainUrl';
 import useSWRMutation from 'swr/mutation';
 import { useState } from 'react';
+import Loading from '../components/Loading';
 
 async function getRequest(url, { arg }) {
-  return fetch(url, {
-    method: 'PUT',
+  return await fetch(url, {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email: arg,
+      email: arg.email,
+      album_id: arg.albumId,
     }),
   }).then((res) => res.json());
 }
@@ -17,21 +19,27 @@ async function getRequest(url, { arg }) {
 const InviteThruEmail = () => {
   const [email, setEmail] = useState('');
 
-  const user_id = localStorage.getItem('user_id');
+  const albumId = localStorage.getItem('album_id');
 
-  const url = `${domainUrl}/api/user/${user_id}`;
+  const url = `${domainUrl}/api/addUserToAlbum`;
 
-  const { trigger, isMutating } = useSWRMutation(url, getRequest);
+  const { data, trigger, isMutating } = useSWRMutation(url, getRequest);
 
   const handleSubmit = () => {
-    trigger(email);
+    trigger({ email, albumId });
   };
 
   return (
     <div className="flex flex-col justify-center items-center h-96 mt-40">
       <p className="text-lg font-work-sans font-semibold  text-gray-500 mb-10 px-10 text-center">
-        Share with a Friend
+        Share Album with a Friend
       </p>
+
+      {data?.message && (
+        <p className="text-lg font-work-sans font-semibold  text-red-500 mb-10 px-10 text-center ">
+          {data?.message}
+        </p>
+      )}
 
       <div className="max-w-2xl mx-auto ">
         <label
@@ -52,10 +60,7 @@ const InviteThruEmail = () => {
         </div>
       </div>
       {isMutating ? (
-        <div className="flex flex-col items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-2"></div>
-          <p className="text-gray-500">Loading...</p>
-        </div>
+        <Loading />
       ) : (
         <button
           onClick={handleSubmit}

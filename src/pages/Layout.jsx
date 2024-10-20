@@ -8,6 +8,7 @@ const Layout = () => {
   const { pathname } = useLocation();
 
   const isOnHome = pathname === '/';
+  const isOnRedirect = pathname.startsWith('/photographer/remote/');
 
   const handleOpenModal = () => {
     setOpenModal(!openModal);
@@ -24,7 +25,9 @@ const Layout = () => {
         <Outlet />
       </div>
 
-      {!isOnHome && <SideMenu isOpen={openModal} onClick={handleOpenModal} />}
+      {!(isOnHome || isOnRedirect) && (
+        <SideMenu isOpen={openModal} onClick={handleOpenModal} />
+      )}
     </>
   );
 };

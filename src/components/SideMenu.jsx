@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useSWRMutation from 'swr/mutation';
 import domainUrl from '../util/domainUrl';
 import useSWR from 'swr';
@@ -34,6 +34,7 @@ const fetcher = (url) =>
 
 const SideMenu = ({ isOpen, onClick }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const album_id = localStorage.getItem('album_id');
   const user_id = localStorage.getItem('user_id');
@@ -47,14 +48,14 @@ const SideMenu = ({ isOpen, onClick }) => {
       setActive('home');
     } else if (location.pathname.includes('/profile')) {
       setActive('profile');
+    } else if (location.pathname.includes('/invite-friend-email')) {
+      setActive('invite-friend-email');
     } else if (location.pathname.includes('/invite')) {
       setActive('invite');
-    } else if (location.pathname.includes('/invite-friend-email')) {
-      setActive('invite');
     } else if (location.pathname.includes('/download')) {
-      setActive('invite');
+      setActive('download');
     }
-  }, [location]);
+  }, [location, setActive]);
 
   const url = `${domainUrl}/api/album/${album_id}`;
 
@@ -65,6 +66,7 @@ const SideMenu = ({ isOpen, onClick }) => {
 
   const handleCheckboxChange = (e) => {
     trigger(e.target.checked ? 'longterm' : 'live');
+    navigate(`/photographer/album/${album_id}/user/${user_id}/${token}`);
   };
 
   return (
